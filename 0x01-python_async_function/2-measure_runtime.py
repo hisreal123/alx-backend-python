@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """The basics of async"""
 
-import asyncio
-from typing import List
+from asyncio import run
+from time import time
 
-wait_random = __import__("0-basic_async_syntax").wait_random
+wait_n = __import__("1-concurrent_coroutines").wait_n
 
 
-async def wait_n(n: int, max_delay: int) -> List[float]:
-    """
-    spawn wait_random n times with the specified max_delay.
-    """
-    tasks = [asyncio.create_task(wait_random(max_delay)) for _ in range(n)]
-    return [await task for task in asyncio.as_completed(tasks)]
+def measure_time(n: int, max_delay: int) -> float:
+    """Measure the runtime"""
+    start = time()
+
+    run(wait_n(n, max_delay))
+
+    end = time()
+
+    return (end - start) / n
